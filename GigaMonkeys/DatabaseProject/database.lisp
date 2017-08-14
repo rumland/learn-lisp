@@ -1,3 +1,5 @@
+(load "./cd-class.lisp")
+
 (defvar *db* nil)
 
 (defun add-cds()
@@ -20,3 +22,14 @@
 (defun dump-db()
   (dolist (cd *db*)
     (format t "~{~a:~10t~a~%~}~%" cd)))
+
+(defun save-db(filename)
+  (with-open-file (out filename :direction :output :if-exists :supersede)
+    (with-standard-io-syntax (print *db* out))))
+
+(defun load-db(filename)
+  (with-open-file (in filename :direction :input)
+    (with-standard-io-syntax (setf *db* (read in)))))
+
+(defun select-cd-by-artist(artist)
+  (remove-if-not #'(lambda(cd) (equal (get-cd-artist cd) artist)) *db*))
