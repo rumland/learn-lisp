@@ -14,9 +14,16 @@
 
 (save-db "C:/Temp/my-cds.db")
 
-;; Need to start at 'Updating Existing Records--Another Use for WHERE' from
-;;  http://www.gigamonkeys.com/book/practical-a-simple-database.html
-
 (defparameter artist "Dixie Chicks")
 (print (format t "CDs with artist: ~a~%~a~%" artist (select-cd-by-artist artist)))
-(print "After NIL?")
+
+(update (where :artist "Dixie Chicks") :rating 11)
+(select (where :artist "Dixie Chicks"))
+(print (format t "CDs with artist: ~a~%~a~%" artist (select-cd-by-artist artist)))
+
+(delete-rows (where :artist "Dixie Chicks"))
+(print "All Dixie Chicks rows should have been deleted")
+(dump-db)
+
+;; Need to start at 'Removing Duplication and Winning Big' from
+;;  http://www.gigamonkeys.com/book/practical-a-simple-database.html
