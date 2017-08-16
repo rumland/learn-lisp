@@ -14,9 +14,9 @@
 
 (save-db "C:/Temp/my-cds.db")
 
-;; Need to start at 'Saving and Loading the Database' from
+;; Need to start at 'Updating Existing Records--Another Use for WHERE' from
 ;;  http://www.gigamonkeys.com/book/practical-a-simple-database.html
 
 (defparameter artist "Dixie Chicks")
-(print (format t "CDs with artist: ~a" artist))
-(select-cd-by-artist "Dixie Chicks")
+(print (format t "CDs with artist: ~a~%~a~%" artist (select-cd-by-artist artist)))
+(print "After NIL?")

@@ -21,15 +21,30 @@
 
 (defun dump-db()
   (dolist (cd *db*)
-    (format t "~{~a:~10t~a~%~}~%" cd)))
+    (dump-cd cd)))
+
+(defun dump-cd(cd)
+  (format t "~{~a:~10t~a~%~}~%" cd))
 
 (defun save-db(filename)
   (with-open-file (out filename :direction :output :if-exists :supersede)
     (with-standard-io-syntax (print *db* out))))
 
 (defun load-db(filename)
-  (with-open-file (in filename :direction :input)
-    (with-standard-io-syntax (setf *db* (read in)))))
+  (if (probe-file filename)
+      (with-open-file (in filename :direction :input)
+	(with-standard-io-syntax (setf *db* (read in))))))
 
 (defun select-cd-by-artist(artist)
-  (remove-if-not #'(lambda(cd) (equal (get-cd-artist cd) artist)) *db*))
+  (select (where :artist artist)))
+
+(defun select (select-fn)
+  (remove-if-not select-fn *db*))
+
+(defun where (&key title artist rating (ripped nil ripped-p))
+  #'(lambda (cd)
+      (and
+       (if title (equal (getf cd :title) title) t)
+       (if artist (equal (getf cd :artist) artist) t)
+       (if rating (equal (getf cd :rating) rating) t)
+       (if ripped-p (equal (getf cd :ripped) ripped) t))))
