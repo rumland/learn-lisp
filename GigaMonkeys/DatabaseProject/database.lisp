@@ -55,10 +55,31 @@
 (defun delete-rows (selector-fn)
   (setf *db* (remove-if selector-fn *db*)))
 
-(defun where (&key title artist rating (ripped nil ripped-p))
+;; Shows how to explicitly build where clause
+(defun where-explicit (&key title artist rating (ripped nil ripped-p))
   #'(lambda (cd)
       (and
        (if title (equal (getf cd :title) title) t)
        (if artist (equal (getf cd :artist) artist) t)
        (if rating (equal (getf cd :rating) rating) t)
        (if ripped-p (equal (getf cd :ripped) ripped) t))))
+
+;; Shows how to dynamically build where clause through use of macro
+;; The ,@ "splices" the value of the following expression--which must evaluate to a list--into
+;; the enclosing list. You can see the difference between , and ,@ in the following two expressions:
+;; 
+;;   `(and ,(list 1 2 3))   ==> (AND (1 2 3))
+;;   `(and ,@(list 1 2 3))  ==> (AND 1 2 3)
+(defmacro where (&rest clauses)
+  `#'(lambda (cd) (and ,@(make-comparisons-list clauses))))
+
+(defun make-comparison-expr-not-clear (field value)
+  (list 'equal (list 'getf 'cd field) value))
+
+;; Clear by use of `. Only subexpression preceded by , are evaluated.
+(defun make-comparison-expr (field value)
+  `(equal (getf cd ,field) ,value))
+
+(defun make-comparisons-list (fields)
+  (loop while fields
+       collecting (make-comparison-expr (pop fields) (pop fields))))
