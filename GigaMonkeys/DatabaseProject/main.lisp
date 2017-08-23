@@ -25,5 +25,5 @@
 (print "All Dixie Chicks rows should have been deleted")
 (dump-db)
 
-;; Need to start at 'S-expressions' from
-;;  http://www.gigamonkeys.com/book/syntax-and-semantics.html
+;; Need to start chapter 5 functions:
+;;  http://www.gigamonkeys.com/book/functions.html
