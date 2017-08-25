@@ -25,5 +25,5 @@
 (print "All Dixie Chicks rows should have been deleted")
 (dump-db)
 
-;; Need to start chapter 5 functions:
+;; Need to start chapter 5 functions & 'Mixing Different Parameter Types':
 ;;  http://www.gigamonkeys.com/book/functions.html

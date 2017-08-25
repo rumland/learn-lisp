@@ -14,6 +14,7 @@
 ;;  * file header comment should use ';;;;'
 ;;  * paragraph comment should use ';;;'
 ;;  * following line of code comment should use ';;'
+;;  * use '->' in function name to indicate convertion. For example, string->widget, says convert string to widget
 
 ;; Macro example
 (defmacro backwards (expr) (reverse expr))
